@@ -77,13 +77,23 @@ def match(guess, word):
 
 
 def solver(guessOutput):
-    goodWords = []
-    greenChars = []
 
-    # Get green characters and there index
-    for char in range(len(guessOutput)):
-        if guessOutput[char][1] == "green":
-            greenChars.append([guessOutput[char][0], char])
+    # Sorts all the characters into there colour and index
+    greenChars = [
+        [guessOutput[char][0], char]
+        for char in range(len(guessOutput))
+        if guessOutput[char][1] == "green"
+    ]
+    greyChars = [
+        [guessOutput[char][0], char]
+        for char in range(len(guessOutput))
+        if guessOutput[char][1] == "grey"
+    ]
+    yellowChars = [
+        [guessOutput[char][0], char]
+        for char in range(len(guessOutput))
+        if guessOutput[char][1] == "yellow"
+    ]
 
     # Getting words with the green characters in the correct index
     count = 0
@@ -91,13 +101,17 @@ def solver(guessOutput):
         if count == 0:
             count += 1
             # Gets all possible words with the first green character in the correct index
-            for word in allWords:
-                if word[greenChars[char][1]] == greenChars[char][0]:
-                    goodWords.append(word)
+            goodWords = [
+                word
+                for word in allWords
+                if word[greenChars[char][1]] == greenChars[char][0]
+            ]
         else:
             # Filters for green characters in the correct indexes
-            for word in goodWords:
-                if word[greenChars[char][1]] != greenChars[char][0]:
-                    goodWords.remove(word)
+            goodWords = [
+                word
+                for word in goodWords
+                if word[greenChars[char][1]] == greenChars[char][0]
+            ]
 
     return goodWords
