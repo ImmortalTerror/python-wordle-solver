@@ -78,40 +78,72 @@ def match(guess, word):
 
 def solver(guessOutput):
 
-    # Sorts all the characters into there colour and index
-    greenChars = [
-        [guessOutput[char][0], char]
-        for char in range(len(guessOutput))
-        if guessOutput[char][1] == "green"
-    ]
-    greyChars = [
-        [guessOutput[char][0], char]
-        for char in range(len(guessOutput))
-        if guessOutput[char][1] == "grey"
-    ]
-    yellowChars = [
-        [guessOutput[char][0], char]
-        for char in range(len(guessOutput))
-        if guessOutput[char][1] == "yellow"
-    ]
+    goodWords = []
+    # Sorts characters by colour, character and index into lists
+    sortedChars = {
+        "greenChars": [
+            [guessOutput[char][0], char]
+            for char in range(len(guessOutput))
+            if guessOutput[char][1] == "green"
+        ],
+        "yellowChars": [
+            [guessOutput[char][0], char]
+            for char in range(len(guessOutput))
+            if guessOutput[char][1] == "yellow"
+        ],
+        "greyChars": [
+            [guessOutput[char][0], char]
+            for char in range(len(guessOutput))
+            if guessOutput[char][1] == "grey"
+        ],
+    }
 
-    # Getting words with the green characters in the correct index
-    count = 0
-    for char in range(len(greenChars)):
-        if count == 0:
-            count += 1
-            # Gets all possible words with the first green character in the correct index
+    # Initial sort from allWords
+    if sortedChars["greenChars"] != []:
+        for char in range(len(sortedChars["greenChars"])):
             goodWords = [
                 word
                 for word in allWords
-                if word[greenChars[char][1]] == greenChars[char][0]
+                if word[sortedChars["greenChars"][char][1]]
+                == sortedChars["greenChars"][char][0]
             ]
-        else:
-            # Filters for green characters in the correct indexes
+    elif sortedChars["yellowChars"] != [] and goodWords == []:
+        for char in range(len(sortedChars["yellowChars"])):
+            goodWords = [
+                word for word in allWords if sortedChars["yellowChars"][char][0] in word
+            ]
+    elif sortedChars["greyChars"] != [] and goodWords == []:
+        for char in range(len(sortedChars["greyChars"])):
+            goodWords = [
+                word
+                for word in allWords
+                if sortedChars["greyChars"][char][0] not in word
+            ]
+
+    # Sorting from goodWords
+    if sortedChars["greenChars"] != []:
+        for char in range(len(sortedChars["greenChars"])):
             goodWords = [
                 word
                 for word in goodWords
-                if word[greenChars[char][1]] == greenChars[char][0]
+                if word[sortedChars["greenChars"][char][1]]
+                == sortedChars["greenChars"][char][0]
             ]
 
-    return goodWords
+    if sortedChars["yellowChars"] != []:
+        for char in range(len(sortedChars["yellowChars"])):
+            goodWords = [
+                word
+                for word in goodWords
+                if sortedChars["yellowChars"][char][0] in word
+            ]
+
+    if sortedChars["greyChars"] != []:
+        for char in range(len(sortedChars["greyChars"])):
+            goodWords = [
+                word
+                for word in goodWords
+                if sortedChars["greyChars"][char][0] not in word
+            ]
+
+    return choice(goodWords)

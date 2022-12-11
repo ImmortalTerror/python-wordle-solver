@@ -1,13 +1,20 @@
-import os
-
-print("Requesting word list...")
+print("Requesting word list...\n")
 from wordle import genWord, match, solver
 
-os.system("cls" if os.name == "nt" else "clear")
-
-# secret = genWord()
-x = match("alrwt", "alert")
+secrete = genWord()
+count = 1
+x = match(genWord(), secrete)
 print(x[0])
-print(x[1])
+guess = solver(x[1])
 
-print(solver(x[1]))
+while guess != secrete:
+    count += 1
+    x = match(guess, secrete)
+    print(x[0])
+    guess = solver(x[1])
+
+count += 1
+x = match(guess, secrete)
+print(x[0])
+print("bruh it worked")
+print(f"took {count} guesses though")
