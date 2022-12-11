@@ -76,9 +76,8 @@ def match(guess, word):
     return [output, solveList]
 
 
-def solver(guessOutput):
+def solver(guessOutput, goodWords=[]):
 
-    goodWords = []
     # Sorts characters by colour, character and index into lists
     sortedChars = {
         "greenChars": [
@@ -99,7 +98,7 @@ def solver(guessOutput):
     }
 
     # Initial sort from allWords
-    if sortedChars["greenChars"] != []:
+    if sortedChars["greenChars"] != [] and goodWords == []:
         for char in range(len(sortedChars["greenChars"])):
             goodWords = [
                 word
@@ -146,4 +145,6 @@ def solver(guessOutput):
                 if sortedChars["greyChars"][char][0] not in word
             ]
 
-    return choice(goodWords)
+    nextGuess = choice(goodWords)
+    goodWords.remove(nextGuess)
+    return [nextGuess, goodWords]
