@@ -11,18 +11,14 @@ allWords = get(
 ).text.splitlines()
 
 
-def genWord(length=0):
+def genWord(length: int = 0) -> list:
     """Generates random word of given length
     If no length was given, it will do any length
     Args: Length (int)
-    Returns: string"""
-
-    correctWords = []
+    Returns: list"""
 
     if length != 0:
-        for word in allWords:
-            if len(word) == length:
-                correctWords.append(word)
+        correctWords = [word for word in allWords if len(word) == length]
 
         return choice(correctWords)
     else:
@@ -30,7 +26,7 @@ def genWord(length=0):
 
 
 # Adds the colores to the guess. Basically the wordle in wordle
-def match(guess, word):
+def match(guess: str, word: str) -> list:
     """Colours the letters in the guess that match the word
     Args: guess (string), word (string)
     Returns: string"""
@@ -44,12 +40,8 @@ def match(guess, word):
 
     solveList = [(), (), (), (), ()]
     # guess and word into lists of chars
-    guessList = []
-    wordList = []
-    for i in guess:
-        guessList.append(i)
-    for i in word:
-        wordList.append(i)
+    guessList = [char for char in guess]
+    wordList = [char for char in word]
 
     # Finds exact matches
     for i in range(len(word)):
