@@ -11,14 +11,18 @@ allWords = get(
 ).text.splitlines()
 
 
-def genWord(length: int = 0) -> list:
+def genWord(length=0):
     """Generates random word of given length
     If no length was given, it will do any length
     Args: Length (int)
-    Returns: list"""
+    Returns: string"""
+
+    correctWords = []
 
     if length != 0:
-        correctWords = [word for word in allWords if len(word) == length]
+        for word in allWords:
+            if len(word) == length:
+                correctWords.append(word)
 
         return choice(correctWords)
     else:
@@ -26,7 +30,7 @@ def genWord(length: int = 0) -> list:
 
 
 # Adds the colores to the guess. Basically the wordle in wordle
-def match(guess: str, word: str) -> list:
+def match(guess, word):
     """Colours the letters in the guess that match the word
     Args: guess (string), word (string)
     Returns: string"""
@@ -40,8 +44,12 @@ def match(guess: str, word: str) -> list:
 
     solveList = [(), (), (), (), ()]
     # guess and word into lists of chars
-    guessList = [char for char in guess]
-    wordList = [char for char in word]
+    guessList = []
+    wordList = []
+    for i in guess:
+        guessList.append(i)
+    for i in word:
+        wordList.append(i)
 
     # Finds exact matches
     for i in range(len(word)):
@@ -68,7 +76,7 @@ def match(guess: str, word: str) -> list:
     return [output, solveList]
 
 
-def solver(guessOutput, goodWords=[]):
+def solver(guessOutput, goodWords=[], prevYellowChars=[]):
 
     # Sorts characters by colour, character and index into lists
     sortedChars = {
@@ -137,6 +145,18 @@ def solver(guessOutput, goodWords=[]):
                 if sortedChars["greyChars"][char][0] not in word
             ]
 
+    # No clue why this doesn't work
+    if prevYellowChars != []:
+        for char in range(len(prevYellowChars)):
+            # for word in goodWords:
+            #     if prevYellowChars[char][0] == word[prevYellowChars[char][1]]:
+            #         goodWords.remove(word)
+            goodWords = [
+                word
+                for word in goodWords
+                if prevYellowChars[char][0] != word[prevYellowChars[char][1]]
+            ]
+
     nextGuess = choice(goodWords)
     goodWords.remove(nextGuess)
-    return [nextGuess, goodWords]
+    return [nextGuess, goodWords, sortedChars["yellowChars"]]
