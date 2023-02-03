@@ -148,15 +148,31 @@ def solver(guessOutput, goodWords=[], prevYellowChars=[]):
     # No clue why this doesn't work
     if prevYellowChars != []:
         for char in range(len(prevYellowChars)):
-            # for word in goodWords:
-            #     if prevYellowChars[char][0] == word[prevYellowChars[char][1]]:
-            #         goodWords.remove(word)
-            goodWords = [
-                word
-                for word in goodWords
-                if prevYellowChars[char][0] != word[prevYellowChars[char][1]]
-            ]
+            for word in goodWords:
+                if prevYellowChars[char][0] == word[prevYellowChars[char][1]]:
+                    goodWords.remove(word)
+            # goodWords = [
+            #     word
+            #     for word in goodWords
+            #     if prevYellowChars[char][0] != word[prevYellowChars[char][1]]
+            # ]
 
+    elif prevYellowChars == []:
+        for char in range(len(sortedChars["yellowChars"])):
+            for word in goodWords:
+                if (
+                    sortedChars["yellowChars"][char][0]
+                    == word[sortedChars["yellowChars"][char][1]]
+                ):
+                    goodWords.remove(word)
+            # goodWords = [
+            #     word
+            #     for word in goodWords
+            #     if sortedChars["yellowChars"][char][0]
+            #     != word[sortedChars["yellowChars"][char][1]]
+            # ]
+
+    goodWords.sort()
     nextGuess = choice(goodWords)
     goodWords.remove(nextGuess)
     return [nextGuess, goodWords, sortedChars["yellowChars"]]

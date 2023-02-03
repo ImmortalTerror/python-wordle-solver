@@ -1,13 +1,13 @@
 from random import choice
 from os import system, name
 
-print(
-    """Wordle ai
-Press ENTER to play
+# print(
+#     """Wordle ai
+# Press ENTER to play
 
-Also this kinda sucks at guessing cause im lazy"""
-)
-input()
+# Also this kinda sucks at guessing cause im lazy"""
+# )
+# input()
 print("\nRequesting word list...\n")
 from wordle import genWord, match, solver
 
